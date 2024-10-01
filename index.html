@@ -1,0 +1,87 @@
+# Volcano Eruption
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Volcano Eruption</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .volcano {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            background: gray;
+            border-radius: 50% 50% 0 0;
+            overflow: hidden;
+        }
+        .lava {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: red;
+            transform: translateX(-50%);
+            animation: erupt 1s infinite;
+        }
+        @keyframes erupt {
+            0% { height: 0; }
+            50% { height: 100%; }
+            100% { height: 0; }
+        }
+        .fire {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: orange;
+            border-radius: 50%;
+            animation: fireParticle 1s infinite;
+        }
+        @keyframes fireParticle {
+            0% { transform: translate(-50%, 0); opacity: 1; }
+            100% { transform: translate(-50%, -100px); opacity: 0; }
+        }
+        .input-container {
+            margin-top: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 200px;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: orange;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>HTML Volcano Eruption</h1>
+    <div class="volcano">
+        <div class="lava"></div>
+        <div class="fire" style="animation-delay: 0s;"></div>
+        <div class="fire" style="animation-delay: 0.2s;"></div>
+        <div class="fire" style="animation-delay: 0.4s;"></div>
+    </div>
+    <div class="input-container">
+        <input type="text" placeholder="Enter your destination">
+        <button>Go</button>
+    </div>
+</body>
+</html>
