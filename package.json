@@ -1,0 +1,18 @@
+{
+  "name": "ignite-flow",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  },
+  "server.js": {
+    "code": "import http from 'http';\n\n// Updated list of IPv4 addresses with specific ports\nconst serverConfigurations = [\n    { ip: '190.104.146.244', port: 999 }, // Paraguay\n    { ip: '140.246.149.224', port: 8888 }, // China\n    { ip: '101.255.94.161', port: 8080 }, // Indonesia\n    { ip: '117.2.28.235', port: 55443 } // Additional IP\n];\n\n// Function to get a random server configuration\nconst getRandomServerConfiguration = () => {\n    const randomIndex = Math.floor(Math.random() * serverConfigurations.length);\n    return serverConfigurations[randomIndex];\n};\n\n// Destructure server configuration\nconst { ip: IPV4, port: PORT } = getRandomServerConfiguration();\n\n// Create the HTTP server (without SSL/TLS)\nconst server = http.createServer((req, res) => {\n    res.writeHead(200, { 'Content-Type': 'text/plain' });\n    res.end(`Server is running on IPv4: ${IPV4}, Port: ${PORT}`);\n});\n\n// Start the server with error handling\nconst startServer = () => {\n    server.listen(PORT, IPV4, (err) => {\n        if (err) {\n            console.error(`Failed to start server: ${err.message}`);\n            return; // Exit early if there's an error\n        }\n        console.log(`Server is running on IPv4: ${IPV4}, Port: ${PORT}`);\n    });\n};\n\n// Check if the IP address is available before starting the server\nconst isAddressAvailable = (ip) => {\n    // Placeholder for actual address availability check\n    return true; // Assuming the address is available for demonstration\n};\n\n// Start the server if the IP address is available\nif (isAddressAvailable(IPV4)) {\n    startServer();\n} else {\n    console.error(`Address ${IPV4} is not available.`);\n}\n\n// Export server configurations for potential use in other modules\nexport default { PORT, IPV4 };"
+  },
+  "index.js": {
+    "code": "import http from 'http';\nimport net from 'net';\nimport url from 'url';\nimport { PORT } from './server.js'; // Importing the port from server.js\n\nclass ProxyServer {\n    constructor(port) {\n        this.server = http.createServer(this.handleRequest.bind(this));\n        this.server.on('connect', this.handleConnect.bind(this));\n        this.server.listen(port, () => {\n            console.log(`Proxy server is running on port ${port}`);\n        });\n    }\n\n    handleRequest(req, res) {\n        res.writeHead(200, { 'Content-Type': 'text/plain' });\n        res.end('Proxy server is working.');\n    }\n\n    handleConnect(req, clientSocket, head) {\n        const { port, hostname } = url.parse(`http://${req.url}`);\n        const serverSocket = net.connect(port, hostname, () => {\n            clientSocket.write('HTTP/1.1 200 Connection Established\\r\\n\\r\\n');\n            serverSocket.write(head);\n            serverSocket.pipe(clientSocket);\n            clientSocket.pipe(serverSocket);\n        });\n\n        serverSocket.on('error', (err) => {\n            console.error(`Connection error: ${err.message}`);\n            clientSocket.end();\n        });\n    }\n}\n\nconst proxyServer = new ProxyServer(PORT);"
+  }
+}
