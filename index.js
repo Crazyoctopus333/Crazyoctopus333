@@ -1,7 +1,7 @@
-const http = require('http');
-const net = require('net');
-const url = require('url');
-const { PORT } = require('./server'); // Importing the port from server.js
+import http from 'http';
+import net from 'net';
+import url from 'url';
+import { PORT } from './server.js'; // Note the .js extension
 
 class ProxyServer {
     constructor(port) {
